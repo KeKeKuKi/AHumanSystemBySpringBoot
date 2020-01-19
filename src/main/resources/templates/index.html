@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="/static/css/loginCss.css" type="text/css">
+    <script src="/static/js/jquery-1.2.6.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Welcome login!</title>
+
+
+    <script type="application/javascript">
+        function cleanWrongMessage(){
+            $("#message").html("");
+        }
+        function logincheck1(){
+            if($("#name").val()==""){
+                alert("请输入用户名！");
+                loginform.name.select();
+                return false;
+            }
+            if($("#pass").val()==""){
+                alert("请输入密码");
+                loginform.passWord.select();
+                return false;
+            }
+            var name = $("#name").val();
+            var passWord = $("#pass").val();
+            loginform.submit();
+
+        }
+    </script>
+
+
+</head>
+
+<body>
+
+<div id="content">
+    <div class="login-header">
+        <span style="font-size: 26px;color: rgb(50,50,100);font-family:‘正楷’;margin-left: 30%">欢迎登录系统</span>
+    </div>
+    <form name="loginform" id="loginForm" action="/user/login" method="post">
+        <div class="login-input-box">
+
+            <span class="icon icon-user"></span>
+            <input style="background-color: rgba(255, 255, 255, 0.4);" placeholder="在此输入账户" id="name" name="name" onfocus="cleanWrongMessage(); ">
+            <br/>
+        </div>
+
+        <div class="login-input-box">
+            <span class="icon icon-password"></span>
+            <input type="password" style="background-color: rgba(255, 255, 255, 0.4);" placeholder="在此输入密码" name="passWord" id="pass" onfocus="cleanWrongMessage();">
+        </div>
+    </form>
+    <div class="remember-box">
+        <label>
+            <p id="message" style="display:inline; margin-left:300px;color: red;font-size: 15px" th:text="${session.logmess}"></p>
+        </label>
+    </div>
+    <div class="login-button-box" >
+        <button type="button" onclick="logincheck1();" class="btn btn-primary">立即登陆</button>
+    </div>
+    <div style="margin: 20px">
+        <a href="#" style="text-decoration:none">忘记密码?</a>
+        <a href="/templates/register.html" style="float: right;text-decoration:none">没有账户？</a>
+    </div>
+</div>
+</body>
+</html>

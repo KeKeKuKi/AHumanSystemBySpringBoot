@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" type="text/css">
+    <script src="/static/js/jquery-1.2.6.js"></script>
+    <script src="/static/layui/layui.js"></script>
+    <meta charset="UTF-8">
+    <title>欢迎访问主页</title>
+    <link rel="stylesheet" href="/static/css/register.css" type="text/css">
+</head>
+
+<body>
+
+<script type="application/javascript">
+    function logincheck1(){
+        if($("#name").val()==""){
+            alert("请输入用户名！");
+            loginform.name.select();
+            return false;
+        }
+        if($("#pass").val()==""){
+            alert("请输入密码");
+            loginform.pass.select();
+            return false;
+        }
+        if($("#pass2").val()==""){
+            alert("请再次输入密码！");
+            loginform.pass2.select();
+            return false;
+        }
+        if($("#email").val()==""){
+            alert("请输入邮箱");
+            loginform.email.select();
+            return false;
+        }
+        if($("#phonember").val()==""){
+            alert("请输入电话号码！");
+            loginform.phonember.select();
+            return false;
+        }
+        if($("#emailkey").val()==""){
+            alert("请输入邮箱验证码");
+            loginform.emailkey.select();
+            return false;
+        }
+
+        loginform.submit();
+
+    }
+
+    function sendeamilkey() {
+        var email = $("#email").val();
+        $.ajax({
+            url:"/user/sendEmailKey",
+            async:true,
+            method:"post",
+            data:{email:email},
+            success:function (result) {
+                if(result!="true"){
+                    alert("请检查您的邮箱输入是否有误！");
+                }else {
+                    alert("验证码已发送至邮件，请注意查收！");
+                }
+            },
+            error:function () {
+                alert("系统异常,请稍后重试！");
+            }
+        })
+    }
+
+
+    function cleanWrongMessage() {
+        $("#name").css("background-color","rgb(255,255,255)");
+    }
+
+    function checkusername() {
+        var name = $("#name").val();
+        $.ajax({
+            url:"/user/checkusername",
+            async:true,
+            method:"post",
+            data:{name:name},
+            success:function (result){
+                if(result=="false"){
+                    alert("该用户名已存在！");
+                    $("#name").val("");
+                    $("#name").css("background-color","rgb(255,200,200)");
+                    loginform.name.select();
+                }
+            },
+            error:function () {
+                alert("系统异常,请稍后重新尝试注册！");
+            }
+        })
+    }
+
+    function checkpass() {
+        if($("#pass").val()!=$("#pass2").val()){
+            alert("两次密码输入不一致！");
+            $("#pass").val("");
+            $("#pass2").val("");
+            loginform.pass.select();
+        }
+    }
+
+</script>
+
+
+
+<div id="content">
+    <div class="login-header">
+        <span style="font-size: 26px;color: rgb(20,20,60);font-family:‘正楷’;margin-left: 30%">欢迎注册系统</span>
+    </div>
+    <form name="loginform" id="loginForm" action="/user/register" method="post">
+        <input type="hidden" name="islogin" value="login"/>
+        <div class="login-input-box">
+            <span class="icon icon-user"></span>
+            <input style="background-color: rgba(255, 255, 255, 0.6);" placeholder="在此输入账户" id="name" name="name" onfocus="cleanWrongMessage()" onchange="checkusername()">
+            <br/>
+        </div>
+
+        <div class="login-input-box">
+            <span class="icon icon-password"></span>
+            <input type="password" style="background-color: rgba(255, 255, 255, 0.6);" placeholder="在此输入密码" name="passWord" id="pass" onfocus="cleanWrongMessage();">
+        </div>
+
+        <div class="login-input-box">
+            <span class="icon icon-password"></span>
+            <input type="password" style="background-color: rgba(255, 255, 255, 0.6);" placeholder="再次确认密码" name="pass2" id="pass2" onfocus="cleanWrongMessage();" onchange="checkpass()">
+        </div>
+
+        <div class="login-input-box">
+            <span class="icon icon-user"></span>
+            <input style="background-color: rgba(255, 255, 255, 0.6);" placeholder="在此输入邮箱" id="email" name="email" onfocus="cleanWrongMessage(); ">
+            <br/>
+        </div>
+
+        <div class="login-input-box">
+            <div class="login-button-box" >
+                <button type="button" onclick="sendeamilkey()" class="btn btn-primary">发送邮箱验证码</button>
+            </div>
+            <span class="icon icon-user"></span>
+            <input style="background-color: rgba(255, 255, 255, 0.6);" placeholder="邮箱验证码" id="emailkey" name="emailkey" onfocus="cleanWrongMessage(); ">
+            <br/>
+        </div>
+
+        <div class="login-input-box">
+            <span class="icon icon-user"></span>
+            <input style="background-color: rgba(255, 255, 255, 0.6);" placeholder="在此输入电话号码" id="phonember" name="phoneNumber" onfocus="cleanWrongMessage(); ">
+            <br/>
+        </div>
+    </form>
+    <div class="login-button-box" >
+        <button type="button" onclick="logincheck1();" class="btn btn-primary">立即注册</button>
+    </div>
+    <div class="logon-box">
+        <a href="/user/login" style="color: white; font-size: 16px;">去登录>></a>
+    </div>
+</div>
+
+</body>
+</html>

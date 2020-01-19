@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎访问主页</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" type="text/css">
+    <script src="/static/js/jquery-1.2.6.js"></script>
+    <script src="/static/layui/layui.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css" type="text/css">
+    <script src="/static/bootstrap3/js/bootstrap.min.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" th:fragment="head">
+        <div class="layui-logo">二狗人事管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="/staff/console">部门扩展</a></li>
+            <li class="layui-nav-item"><a href="/staff/find?page=1">信息查询</a></li>
+
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    <span  th:text="${session.user.name}">用户</span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/user/signout">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black" th:fragment="menue">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">技术部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/jsstaff?page=1">前端开发小组</a></dd>
+                        <dd><a href="/staff/backstaff?page=1">后端开发小组</a></dd>
+                        <dd><a href="/staff/serverstaff?page=1">服务器开发小组</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">销售部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/salestaff?page=1">销售小组</a></dd>
+                        <dd><a href="/staff/businessstaff?page=1">业务小组</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">生产部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/workshopstaff?page=1">车间</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">市场</a></li>
+                <li class="layui-nav-item"><a href="">商品</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 5px;">
+            <div class="layui-carousel" id="test10">
+                <div carousel-item="">
+                    <div><img src="/static/images/loginBac.jpg"></div>
+                    <div><img src="/static/images/loginBac.jpg"></div>
+                    <div><img src="/static/images/loginBac.jpg"></div>
+                    <div><img src="/static/images/loginBac.jpg"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer" th:fragment="bottom">
+        <!-- 底部固定区域 -->
+        © zhaozezhong.fun - <a href="http://zhaozezhong.fun">欢迎访问我的主页</a>
+    </div>
+</div>
+
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    layui.use(['carousel', 'form'], function() {
+        var carousel = layui.carousel
+            , form = layui.form;
+
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '100%'
+            , height: '653px'
+            , interval: 3000
+        });
+    });
+</script>
+</body>
+</html>

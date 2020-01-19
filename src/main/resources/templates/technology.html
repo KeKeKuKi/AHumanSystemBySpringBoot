@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" type="text/css">
+    <script src="/static/js/jquery-1.2.6.js"></script>
+    <script src="/static/layui/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+
+<script>
+    function dalete(id) {
+        if(confirm("确实要删除吗？")){
+            $.ajax({
+                url:"/staff/deletetaff",
+                async:true,
+                method:"post",
+                data:{id:id},
+                success:function (result) {
+                    if(result=="true"){
+                        window.location.reload();
+                        alert("删除成功！");
+                    }else alert("系统异常，删除失败！");
+                },
+                error:function () {
+                    alert("系统异常，删除失败！");
+                }
+            })
+        }
+    }
+
+    function edit(id){
+        $("#edit-form").show();
+
+        $.ajax({
+            url:"/staff/findAStaff",
+            async:true,
+            method:"post",
+            data:{id:id},
+            success:function (result) {
+                result = result.split(",");
+                console.log(result);
+                var name = result[0];
+                var age = result[1];
+                var job = result[2];
+                var intime = result[3];
+                var email = result[4];
+                var salery = result[5];
+                var phonenumber = result[6];
+                var staffid = result[7];
+                $("#edit-form-name").val(name);
+                $("#edit-form-age").val(age);
+                $("#edit-form-job").val(job);
+                $("#test1").val(intime);
+                $("#edit-form-email").val(email);
+                $("#edit-form-salery").val(salery);
+                $("#edit-form-phonenumber").val(phonenumber);
+                $("#edit-form-id").val(staffid);
+                //window.location.reload();
+            },
+            error:function () {
+                alert("系统异常,请稍后重试！");
+            }
+        })
+    }
+
+    function hidenform() {
+        $("#edit-form").hide();
+    }
+
+
+    function updatestaff(id) {
+        if(confirm("确实要修改吗？")){
+            var name =$("#edit-form-name").val();
+            var id =$("#edit-form-id").val();
+            var age =$("#edit-form-age").val();
+            var job =$("#edit-form-job").val();
+            var intime =$("#test1").val();
+            var email =$("#edit-form-email").val();
+            var salery =$("#edit-form-salery").val();
+            var phonenumber =$("#edit-form-phonenumber").val();
+
+            $.ajax({
+                url:"/staff/updateStaff",
+                async:true,
+                method:"post",
+                data:{"staffId":id,"staffName":name,"staffAge":age,"jobName":job,"staffEntrytime":intime,"staffEmail":email,"staffSalary":salery,"staffPhonenumber":phonenumber},
+                success:function (result) {
+                    if(result=="true"){
+                        window.location.reload();
+                        alert("修改成功！");
+                    }
+                    else
+                        alert("修改失败！");
+
+                },
+                error:function () {
+                    alert("系统异常，修改失败！");
+                }
+            })
+        }
+    }
+</script>
+
+
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="main :: head">
+    </div>
+
+
+    <div class="layui-side layui-bg-black" th:fragment="menue">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">技术部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/jsstaff?page=1">前端开发小组</a></dd>
+                        <dd><a href="/staff/backstaff?page=1">后端开发小组</a></dd>
+                        <dd><a href="/staff/serverstaff?page=1">服务器开发小组</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">销售部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/salestaff?page=1">销售小组</a></dd>
+                        <dd><a href="/staff/businessstaff?page=1">业务小组</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">生产部</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/staff/workshopstaff?page=1">车间</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">市场</a></li>
+                <li class="layui-nav-item"><a href="">商品</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-body" >
+        <div id="edit-form" style="display: none;width: 80%;height: 300px;background-color: white;position: absolute;left: 10%;top: 160px;z-index: 999;border:#909090 1px solid;">
+            <form class="layui-form" action="" style="padding: 50px" >
+                    <div class="layui-inline">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" class="layui-input" id="edit-form-name">
+                            <input type="hidden" name="id" id="edit-form-id">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">年龄</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="age" class="layui-input" id="edit-form-age">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">职位</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="job" class="layui-input" id="edit-form-job" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">入职日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd" name="intime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">邮件</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="email" class="layui-input" id="edit-form-email">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">工资</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="salery" class="layui-input" id="edit-form-salery">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">电话号码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="phonenumber" class="layui-input" id="edit-form-phonenumber">
+                        </div>
+                    </div>
+            </form>
+            <div style="position: absolute;right: 25px">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="updatestaff()">确认修改</button>
+                &nbsp;
+                <button type="button" class="layui-btn layui-btn-normal" onclick="hidenform()">取消修改</button>
+            </div>
+        </div>
+        <!-- 内容主体区域 -->
+        <div style="padding: 5px;">
+            <div class="layui-form">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>性别</th>
+                        <th>入职时间</th>
+                        <th>电话号码</th>
+                        <th>工作职位</th>
+                        <th>部门</th>
+                        <th>薪资</th>
+                        <th>邮箱</th>
+                        <th>编辑</th>
+                        <th>删除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="staff : ${staffList}">
+                        <td th:text="${staff.staffName}"></td>
+                        <td th:text="${staff.staffAge}"></td>
+                        <td th:text="${staff.staffSex}"></td>
+                        <td th:text="${staff.staffEntrytime}"></td>
+                        <td th:text="${staff.staffPhonenumber}"></td>
+                        <td th:text="${staff.jobName}"></td>
+                        <td th:text="${staff.departmentName}"></td>
+                        <td th:text="${staff.staffSalary}"></td>
+                        <td th:text="${staff.staffEmail}"></td>
+                        <td><button type="button" class="layui-btn"><i class="layui-icon" th:id="${staff.staffId}" onclick="edit(this.id)" ></i></button></td>
+                        <td><button type="button" class="layui-btn"><i class="layui-icon" th:id="${staff.staffId}" onclick="dalete(this.id)"></i></button></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <tr th:each="item,pageStat:${pageBuffer}">
+                    <a th:href="${pageStat.index}+1"></a>
+                    <button type="button" class="layui-btn layui-btn-normal">
+                        <a style="color: white" th:href="${pageStat.current.value}" th:text="${pageStat.current.key}"></a>
+                    </button>
+                </tr>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="main :: bottom">
+    </div>
+</div>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //常规用法
+        laydate.render({
+            elem: '#test1'
+        });
+    })
+</script>
+</body>
+</html>
